@@ -8,7 +8,7 @@ const profile = {
 
 
 const server = http.createServer((req, res) => {
-    if (req.url === '/profile'){
+    if (req.url === '/profile') {
         res.writeHead(200, { 
             'Content-Type': 'application/json', 
             'Access-Control-Allow-Origin': '*'
