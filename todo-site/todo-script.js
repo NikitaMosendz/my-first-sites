@@ -1,6 +1,7 @@
 const serverButton = document.getElementById('server-button');
 const statusTextField = document.getElementById('status-text-field');
 const textField = document.getElementById('text-field');
+const todoList = document.getElementById('todo-list');
 const body = document.body;
 
 serverButton.addEventListener('click', () => {
@@ -20,5 +21,9 @@ fetch('http://localhost:4000/color')
 fetch('http://localhost:4000/todos')
     .then(response => response.json())
     .then(data => {
-        textField.textContent = JSON.stringify(data)
+        todoList.innerHTML = '';
+
+        data.forEach(todo => {
+            todoList.appendChild(document.createElement("li")).textContent = todo.title
+        });
     });
