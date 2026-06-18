@@ -27,6 +27,17 @@ app.get('/status', (req, res) => {
     res.json(siteSettings)
 });
 
+app.post('/todos', (req, res) => {
+    const newTodo = {
+        id: todos.length + 1,
+        title: req.body.title,
+        completed: false
+    };
+
+    todos.push(newTodo);
+    res.json(newTodo);
+})
+
 app.listen(4000, () => {
     console.log('Server started on http://localhost:4000')
 });
