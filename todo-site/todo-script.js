@@ -15,7 +15,7 @@ serverButton.addEventListener('click', () => {
 fetch('http://localhost:4000/color')
     .then(response => response.json())
     .then(data => {
-        body.style.backgroundColor = data.recommendedColor
+        body.style.backgroundColor = data.recommendedColor;
     });
 
 fetch('http://localhost:4000/todos')
@@ -24,6 +24,13 @@ fetch('http://localhost:4000/todos')
         todoList.innerHTML = '';
 
         data.forEach(todo => {
-            todoList.appendChild(document.createElement("li")).textContent = todo.title
+            const li = document.createElement("li");
+            li.textContent = todo.title;
+
+            if (todo.completed === true) {
+                li.style.textDecoration = "line-through";
+            }
+
+            todoList.appendChild(li);
         });
     });
