@@ -13,16 +13,25 @@ h1 {
 
 #status-text-field {
     color: green;
-    padding: 30px;
     font-family: cursive;
     font-size: 25px;
-    margin-top: 30px;
-    margin-bottom: 1px;
 }
+
+#todo-input {
+    color: rgb(59, 59, 59);
+    padding: 5px;
+    border-radius: 5px;
+    border-color: rgb(59, 59, 59);
+    font-size: 25px;
+    font-family: cursive;
+    margin-bottom: 50px;
+}
+
 #todo-list {
     color: rgb(59, 59, 59);
     font-size: 30px;
     font-family: cursive;
+    margin: 50px;
 }
 
 button {
