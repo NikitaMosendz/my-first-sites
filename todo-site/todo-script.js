@@ -55,6 +55,21 @@ function loadTodos() {
                     li.style.textDecoration = "line-through";
                 }
 
+                li.addEventListener('click', () => {
+                    const updatedStatus = !todo.completed;
+                    fetch(`http://localhost:4000/todos/${todo.id}`, {
+                        method: 'PATCH',
+                        headers: {
+                            'content-type': 'application/json'
+                        },
+                        body: JSON.stringify({ completed: updatedStatus })
+                    })
+                    .then(response => response.json())
+                    .then(() => {
+                        loadTodos();
+                    });
+                });
+
                 todoList.appendChild(li);
             });
         });

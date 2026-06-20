@@ -38,6 +38,19 @@ app.post('/todos', (req, res) => {
     res.json(newTodo);
 })
 
+app.patch('/todos/:id', (req, res) => {
+    const todoId = parseInt(req.params.id);
+
+    const currentTodo = todos.find(t => t.id === todoId);
+
+    if (currentTodo) {
+        currentTodo.completed = req.body.completed;
+        res.json(currentTodo);
+    } else {
+        res.status(404).json({ error: "Task not found"});
+    };
+});
+
 app.listen(4000, () => {
     console.log('Server started on http://localhost:4000')
 });

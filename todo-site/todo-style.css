@@ -19,6 +19,7 @@ h1 {
 
 #todo-input {
     color: rgb(59, 59, 59);
+    background-color: #fde9d0;
     padding: 5px;
     border-radius: 5px;
     border-color: rgb(59, 59, 59);
