@@ -51,6 +51,14 @@ app.patch('/todos/:id', (req, res) => {
     };
 });
 
+app.delete('/todos/:id', (req, res) => {
+    const todoId = parseInt(req.params.id);
+
+    todos = todos.filter(t => t.id !== todoId);
+
+    res.json({ success: true, deletedId: todoId });
+});
+
 app.listen(4000, () => {
     console.log('Server started on http://localhost:4000')
 });

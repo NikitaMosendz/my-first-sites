@@ -49,13 +49,14 @@ function loadTodos() {
 
             data.forEach(todo => {
                 const li = document.createElement("li");
-                li.textContent = todo.title;
-
-                if (todo.completed === true) {
-                    li.style.textDecoration = "line-through";
+                
+                const textSpan = document.createElement("span");
+                textSpan.textContent = todo.title;
+                if (todo.completed) {
+                    textSpan.style.textDecoration = "line-through";
                 }
 
-                li.addEventListener('click', () => {
+                textSpan.addEventListener('click', () => {
                     const updatedStatus = !todo.completed;
                     fetch(`http://localhost:4000/todos/${todo.id}`, {
                         method: 'PATCH',
@@ -70,6 +71,24 @@ function loadTodos() {
                     });
                 });
 
+                const deleteBtn = document.createElement("button");
+                deleteBtn.textContent = " X";
+                deleteBtn.style.background = "none";
+                deleteBtn.style.border = "none";
+                deleteBtn.style.cursor = "pointer";
+                deleteBtn.style.color = "red";
+
+                deleteBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+
+                    fetch(`http://localhost:4000/todos/${todo.id}`, {
+                        method: 'DELETE'
+                    })
+                    .then(() => loadTodos());
+                })
+
+                li.appendChild(textSpan);
+                li.appendChild(deleteBtn);
                 todoList.appendChild(li);
             });
         });

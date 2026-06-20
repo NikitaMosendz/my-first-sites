@@ -33,6 +33,13 @@ h1 {
     font-size: 30px;
     font-family: cursive;
     margin: 50px;
+    cursor: pointer;
+    user-select: none;
+    transition: background-color 0.3s ease;
+    border-radius: 15px;
+}
+#todo-list:hover {
+    background-color: rgb(238, 184, 118);
 }
 
 button {
