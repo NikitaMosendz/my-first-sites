@@ -1,22 +1,26 @@
+const taskCounter = document.getElementById('counter');
 const serverButton = document.getElementById('server-button');
 const addButton = document.getElementById('add-button');
+const deleteAllButton = document.getElementById('delete-all-button');
 const statusTextField = document.getElementById('status-text-field');
-const textInput = document.getElementById('todo-input');
+const inputErrorField = document.getElementById('input-error');
+const todoInput = document.getElementById('todo-input');
 const todoList = document.getElementById('todo-list');
 const body = document.body;
 
-serverButton.addEventListener('click', () => {
-    fetch('http://localhost:4000/status')
-        .then(response => response.json())
-        .then(data => {
-            statusTextField.textContent = data.status;
-    });
+todoInput.addEventListener('input', (event) => {
+    todoInput.style.borderColor = "rgb(59, 59, 59)";
+    inputErrorField.textContent = '';
 });
 
 addButton.addEventListener('click', () => {
-    const taskText = textInput.value;
+    const taskText = todoInput.value;
 
-    if (taskText === '') return;
+    if (taskText === '') {
+        todoInput.style.borderColor = 'red';
+        inputErrorField.textContent = "Task cannot be empty!";
+        return;
+    };
 
     fetch('http://localhost:4000/todos', {
         method: 'POST',
@@ -31,8 +35,28 @@ addButton.addEventListener('click', () => {
 
         loadTodos();
 
-        textInput.value = '';
+        todoInput.value = '';
     })
+});
+
+deleteAllButton.addEventListener('click', () => {
+    fetch('http://localhost:4000/todos/clear', {
+        method: 'DELETE'
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            loadTodos();
+        }
+    })
+});
+
+serverButton.addEventListener('click', () => {
+    fetch('http://localhost:4000/status')
+        .then(response => response.json())
+        .then(data => {
+            statusTextField.textContent = data.status;
+    });
 });
 
 fetch('http://localhost:4000/color')
@@ -91,6 +115,8 @@ function loadTodos() {
                 li.appendChild(deleteBtn);
                 todoList.appendChild(li);
             });
+
+            taskCounter.textContent = `Total tasks: ${data.length}`;
         });
 }
 
