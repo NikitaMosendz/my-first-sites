@@ -2,12 +2,14 @@ const express = require('express');
 const cors = require('cors');
 const fs = require('fs');
 
+const dbPath = 'todos.json';
+
 let app = express();
 
 app.use(express.json());
 app.use(cors());
 
-let todos = JSON.parse(fs.readFileSync('todos.json', 'utf-8'));
+let todos = JSON.parse(fs.readFileSync(dbPath, 'utf-8'));
 
 const todoSettings = {
     status: "Server is running smoothly",
@@ -46,13 +48,13 @@ app.post('/todos', (req, res) => {
     };
 
     todos.push(newTodo);
-    fs.writeFileSync('todos.json', JSON.stringify(todos, null, 2));
+    fs.writeFileSync(dbPath, JSON.stringify(todos, null, 2));
     res.json(newTodo);
 })
 
 app.delete('/todos/clear', (req, res) => {
     todos = [];
-    fs.writeFileSync('todos.json', JSON.stringify(todos, null, 2));
+    fs.writeFileSync(dbPath, JSON.stringify(todos, null, 2));
     res.json({ success: true })
 })
 
@@ -63,7 +65,7 @@ app.patch('/todos/:id', (req, res) => {
 
     if (currentTodo) {
         currentTodo.completed = req.body.completed;
-        fs.writeFileSync('todos.json', JSON.stringify(todos, null, 2));
+        fs.writeFileSync(dbPath, JSON.stringify(todos, null, 2));
         res.json(currentTodo);
     } else {
         res.status(404).json({ error: "Task not found"});
@@ -74,7 +76,7 @@ app.delete('/todos/:id', (req, res) => {
 
     todos = todos.filter(t => t.id !== todoId);
 
-    fs.writeFileSync('todos.json', JSON.stringify(todos, null, 2));
+    fs.writeFileSync(dbPath, JSON.stringify(todos, null, 2));
 
     res.json({ success: true, deletedId: todoId });
 });

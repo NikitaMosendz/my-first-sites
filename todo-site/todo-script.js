@@ -1,4 +1,6 @@
 const taskCounter = document.getElementById('counter');
+const completedTasks = document.getElementById('completed-counter');
+const pendingTasks = document.getElementById('pending-counter');
 const serverButton = document.getElementById('server-button');
 const addButton = document.getElementById('add-button');
 const deleteAllButton = document.getElementById('delete-all-button');
@@ -80,8 +82,11 @@ function loadTodos() {
                     textSpan.style.textDecoration = "line-through";
                 }
 
-                textSpan.addEventListener('click', () => {
+                textSpan.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    
                     const updatedStatus = !todo.completed;
+
                     fetch(`http://localhost:4000/todos/${todo.id}`, {
                         method: 'PATCH',
                         headers: {
@@ -90,8 +95,16 @@ function loadTodos() {
                         body: JSON.stringify({ completed: updatedStatus })
                     })
                     .then(response => response.json())
-                    .then(() => {
-                        loadTodos();
+                    .then(updatedTodo => {
+                        todo.completed = updatedTodo.completed;
+
+                        if (todo.completed) {
+                            textSpan.style.textDecoration = "line-through";
+                        } else {
+                            textSpan.style.textDecoration = "none";
+                        }
+
+                        updateStatus();
                     });
                 });
 
@@ -115,8 +128,18 @@ function loadTodos() {
                 li.appendChild(deleteBtn);
                 todoList.appendChild(li);
             });
+        });
+    
+    updateStatus();
+};
 
-            taskCounter.textContent = `Total tasks: ${data.length}`;
+function updateStatus() {
+    fetch('http://localhost:4000/todos/status')
+        .then(response => response.json())
+        .then(data => {
+            taskCounter.textContent = `Total Tasks: ${data.total}`;
+            completedTasks.textContent = `Completed Tasks: ${data.completedCount}`;
+            pendingTasks.textContent = `Pending Tasks: ${data.pendingCount}`;
         });
 }
 
