@@ -42,7 +42,7 @@ app.get('/todos/search', (req, res) => {
 
 app.post('/todos', (req, res) => {
     const newTodo = {
-        id: todos.length + 1,
+        id: crypto.randomUUID(),
         title: req.body.title,
         completed: false
     };
@@ -59,7 +59,7 @@ app.delete('/todos/clear', (req, res) => {
 })
 
 app.patch('/todos/:id', (req, res) => {
-    const todoId = parseInt(req.params.id);
+    const todoId = req.params.id;
 
     const currentTodo = todos.find(t => t.id === todoId);
 
@@ -72,7 +72,7 @@ app.patch('/todos/:id', (req, res) => {
     };
 });
 app.delete('/todos/:id', (req, res) => {
-    const todoId = parseInt(req.params.id);
+    const todoId = req.params.id;
 
     todos = todos.filter(t => t.id !== todoId);
 

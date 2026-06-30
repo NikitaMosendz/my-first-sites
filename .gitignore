@@ -1,2 +1,3 @@
 node_modules/
-todos.json
+todo-site/todos.json
+../todos.json

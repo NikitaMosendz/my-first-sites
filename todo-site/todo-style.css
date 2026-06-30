@@ -24,7 +24,7 @@ h1 {
     color: rgb(59, 59, 59);
     background-color: #fde9d0;
     padding: 5px;
-    border-radius: 5px;
+    border-radius: 10px;
     border-color: rgb(59, 59, 59);
     font-size: 25px;
     font-family: cursive;
@@ -34,6 +34,17 @@ h1 {
     color: rgb(207, 0, 0);
     font-family: cursive;
     font-size: 15px;
+}
+
+#search-input {
+    color: rgb(59, 59, 59);
+    background-color: #fde9d0;
+    padding: 5px;
+    border-radius: 10px;
+    border-color: rgb(59, 59, 59);
+    font-size: 20px;
+    font-family: cursive;
+    margin-top: 30px;
 }
 
 #add-button {
