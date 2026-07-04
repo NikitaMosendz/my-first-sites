@@ -51,6 +51,31 @@ h1 {
     margin-bottom: 20px;
 }
 
+#filter-buttons {
+    margin-top: 30px;
+}
+
+.filter-buttons {
+    color: rgb(59, 59, 59);
+    background-color: rgb(255, 186, 101);
+    font-size: 25px;
+    font-family: cursive;
+    border-color: white;
+    border-radius: 15px;
+    padding: 10px 15px;
+    transition: background-color 0.4s ease;
+}
+
+/* 2. Эффект, когда кнопка НАЖАТА и остаётся активной (или когда на неё прямо сейчас кликают) */
+.filter-buttons.active, .filter-buttons:active {
+    
+    /* Уменьшаем или убираем тень, так как кнопка уже "прижалась" к полу */
+    box-shadow: 0 0px 0 #b57c3a;
+    
+    /* Опционально: делаем цвет чуть темнее, как у тебя на кнопке Clear All */
+    background-color: #d19451; 
+}
+
 #todo-list {
     color: rgb(59, 59, 59);
     font-size: 30px;

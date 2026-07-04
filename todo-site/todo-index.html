@@ -7,17 +7,29 @@
 </head>
 <body>
     <h1>To do</h1>
+
     <div id="stats-container">
         <p id="counter">Total tasks: 0</p>
         <p id="completed-counter">Completed: 0</p>
         <p id="pending-counter">Pending: 0</p>
     </div>
+
     <input type="text" id="todo-input" placeholder="Enter new task...">
     <p id="input-error"></p>
+
     <button id="add-button">Add Task</button>
     <button id="delete-all-button">Clear All</button>
+
     <input type="text" id="search-input" placeholder="Search tasks...">
+
+    <div id="filter-buttons">
+        <button id="filter-all" class="filter-buttons active">All</button>
+        <button id="filter-active" class="filter-buttons">Active</button>
+        <button id="filter-completed" class="filter-buttons">Completed</button>
+    </div>
+
     <ul id="todo-list"></ul>
+
     <button id="server-button">Get secret server status</button>
     <p id="status-text-field"></p>
 

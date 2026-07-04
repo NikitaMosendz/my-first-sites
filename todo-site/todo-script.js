@@ -1,15 +1,86 @@
 const taskCounter = document.getElementById('counter');
 const completedTasks = document.getElementById('completed-counter');
 const pendingTasks = document.getElementById('pending-counter');
+
 const serverButton = document.getElementById('server-button');
+const statusTextField = document.getElementById('status-text-field');
+
 const addButton = document.getElementById('add-button');
 const deleteAllButton = document.getElementById('delete-all-button');
-const statusTextField = document.getElementById('status-text-field');
-const inputErrorField = document.getElementById('input-error');
+
 const todoInput = document.getElementById('todo-input');
+const inputErrorField = document.getElementById('input-error');
+
 const searchInput = document.getElementById('search-input');
 const todoList = document.getElementById('todo-list');
+
+const filterAllButton = document.getElementById('filter-all');
+const filterActiveButton = document.getElementById('filter-active');
+const filterCompletedButton = document.getElementById('filter-completed');
+
 const body = document.body;
+
+let currentTodos = [];
+
+let pressedAllTodos = true;
+let pressedActiveTodos = false;
+let pressedCompletedTodos = false;
+
+filterAllButton.addEventListener('click', () => {
+    pressedAllTodos = true;
+    pressedActiveTodos = false;
+    pressedCompletedTodos = false;
+
+    filterAllButton.classList.add('active');
+    filterActiveButton.classList.remove('active');
+    filterCompletedButton.classList.remove('active');
+
+    renderTodos(currentTodos);
+
+    if (searchInput.value.trim() !== '') {
+        searchInput.dispatchEvent(new Event('input'));
+    } else {
+        loadTodos();
+    }
+})
+
+filterActiveButton.addEventListener('click', () => {
+    pressedAllTodos = false;
+    pressedActiveTodos = true;
+    pressedCompletedTodos = false;
+
+    filterAllButton.classList.remove('active');
+    filterActiveButton.classList.add('active');
+    filterCompletedButton.classList.remove('active');
+    
+    const activeTodos = currentTodos.filter(todo => !todo.completed);
+    renderTodos(activeTodos);
+
+    if (searchInput.value.trim() !== '') {
+        searchInput.dispatchEvent(new Event('input'));
+    } else {
+        loadTodos();
+    }
+})
+
+filterCompletedButton.addEventListener('click', () => {
+    pressedAllTodos = false;
+    pressedActiveTodos = false;
+    pressedCompletedTodos = true;
+
+    filterAllButton.classList.remove('active');
+    filterActiveButton.classList.remove('active');
+    filterCompletedButton.classList.add('active');
+
+    const completedTodos = currentTodos.filter(todo => todo.completed);
+    renderTodos(completedTodos);
+
+    if (searchInput.value.trim() !== '') {
+        searchInput.dispatchEvent(new Event('input'));
+    } else {
+        loadTodos();
+    }
+})
 
 todoInput.addEventListener('input', (event) => {
     todoInput.style.borderColor = "rgb(59, 59, 59)";
@@ -27,7 +98,13 @@ searchInput.addEventListener('input', (e) => {
     fetch(`http://localhost:4000/todos/search?title=${query}`)
         .then(response => response.json())
         .then(filteredTodos => {
-            renderTodos(filteredTodos);
+            if (pressedAllTodos) {
+                renderTodos(filteredTodos);
+            } else if (pressedActiveTodos) {
+                renderTodos(filteredTodos.filter(todo => !todo.completed));
+            } else if (pressedCompletedTodos) {
+                renderTodos(filteredTodos.filter(todo => todo.completed));
+            }
         });
 });
 
@@ -50,6 +127,8 @@ addButton.addEventListener('click', () => {
     .then(response => response.json())
     .then(newTodo => {
         console.log("Successfully added:", newTodo);
+
+        currentTodos.push(newTodo);
 
         if (searchInput.value.trim() !== '') {
             searchInput.dispatchEvent(new Event('input'));
@@ -106,22 +185,12 @@ function renderTodos(todosArray) {
 
             fetch(`http://localhost:4000/todos/${todo.id}`, {
                 method: 'PATCH',
-                headers: {
-                    'content-type': 'application/json'
-                },
+                headers: { 'content-type': 'application/json' },
                 body: JSON.stringify({ completed: updatedStatus })
             })
             .then(response => response.json())
             .then(updatedTodo => {
-                todo.completed = updatedTodo.completed;
-
-                if (todo.completed) {
-                    textSpan.style.textDecoration = "line-through";
-                } else {
-                    textSpan.style.textDecoration = "none";
-                }
-
-                updateStatus();
+                loadTodos();
             });
         });
 
@@ -157,7 +226,21 @@ function loadTodos() {
     fetch('http://localhost:4000/todos')
         .then(response => response.json())
         .then(data => {
-            renderTodos(data);
+            currentTodos = data;
+
+            let filtered = currentTodos;
+            if (pressedActiveTodos) {
+                filtered = currentTodos.filter(todo => !todo.completed);
+            } else if (pressedCompletedTodos) {
+                filtered = currentTodos.filter(todo => todo.completed);
+            }
+
+            const query = searchInput.value.trim().toLowerCase();
+            if (query !== '') {
+                filtered = filtered.filter(todo => todo.title.toLowerCase().includes(query));
+            }
+
+            renderTodos(filtered);
         });
     updateStatus();
 };

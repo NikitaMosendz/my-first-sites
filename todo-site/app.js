@@ -16,7 +16,6 @@ const todoSettings = {
     recommendedColor: "#ffd39d"
 }
 
-
 app.get('/todos', (req, res) => {
     res.json(todos);
 });
